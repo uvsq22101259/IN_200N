@@ -18,27 +18,44 @@ def creer_balle():
     balle.append(terrain.create_oval(((LARGEUR//2)-10,(HAUTEUR//2)-10),((LARGEUR//2)+10,(HAUTEUR//2)+10), fill="blue",))
     for i in range (2):
         balle.append(rd.randint(1,7))
+
     return(balle)
 
 
-def mouvement(balle):
-    global inte, cord
-    cord = terrain.coords(balle[0])
-    print(cord)
-    if  inte == 0:
+def mouvement(ball):
+    global inte, cord, id
+    cord = terrain.coords(ball[0])
+    
+    
+    if  inte == 1 :
         demarrer.config(text= "arreter")
-        inte += 1
-        mouv_infinie(balle)
-    else :
+        cord = terrain.coords(ball[0])
+        if cord[0] <= 0 or cord[2] >= LARGEUR or cord[1] <= 0 or cord[3] >= HAUTEUR:
+            rebond1(creation)
+        terrain.move(ball[0],ball[1],ball[2])
+        id = racine.after(50,lambda : mouvement(creation))
+    if inte == 2:
         racine.after_cancel(id)
         demarrer.config(text="Démarrer")
-        inte -= 1
+
+    
 
 
-def mouv_infinie(balle):
-    global id
-    terrain.move(balle[0],balle[1],balle[2])
-    id = racine.after(200,lambda : mouv_infinie(balle))
+def stop(event):
+    global inte
+    if event.widget == demarrer:
+        inte += 1 
+        if inte == 2:
+            inte = 0
+        print(inte)
+
+    
+def rebond1(ball_rebond):
+    
+    if cord[0] <= 0 or cord[2] >= LARGEUR:
+        creation[1] = -ball_rebond[1]
+    if cord[1] <= 0 or cord[3] >= HAUTEUR:
+        creation[2] = -ball_rebond[2]
     
    
 
@@ -50,10 +67,9 @@ terrain = tk.Canvas(racine, width=LARGEUR, height= HAUTEUR, bg ="black")
 terrain.grid(column=0, row=0)
 
 creation = creer_balle()
-
-demarrer = tk.Button(racine,text="Démarrer", command= lambda: mouvement(creation),   )
+demarrer = tk.Button(racine,text="Démarrer", command= lambda : mouvement(creation))
 demarrer.grid(column=0,row=1)
-
+racine.bind("<Button-1>", stop)
 
 
 racine.mainloop()
