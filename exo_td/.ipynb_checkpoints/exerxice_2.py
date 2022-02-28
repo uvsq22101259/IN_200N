@@ -31,9 +31,9 @@ def mouvement(ball):
         demarrer.config(text= "arreter")
         cord = terrain.coords(ball[0])
         if cord[0] <= 0 or cord[2] >= LARGEUR or cord[1] <= 0 or cord[3] >= HAUTEUR:
-            rebond1(creation)
+            rebond2(creation)
         terrain.move(ball[0],ball[1],ball[2])
-        id = racine.after(50,lambda : mouvement(creation))
+        id = racine.after(20,lambda : mouvement(creation))
     if inte == 2:
         racine.after_cancel(id)
         demarrer.config(text="Démarrer")
@@ -58,6 +58,20 @@ def rebond1(ball_rebond):
         creation[2] = -ball_rebond[2]
     
    
+
+
+
+def rebond2(ball_rebond):
+    if  cord[0] <= 0:
+        terrain.move(creation[0],LARGEUR,creation[2])
+    if cord[2] >= LARGEUR:
+        terrain.move(creation[0],-LARGEUR,creation[2])
+    if cord[1] <= 0:
+        terrain.move(creation[0],creation[1],HAUTEUR)
+    if cord[3] >= HAUTEUR:
+         terrain.move(creation[0],creation[1],-HAUTEUR)
+
+
 
 
 racine = tk.Tk()
