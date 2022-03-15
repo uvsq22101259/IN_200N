@@ -31,9 +31,9 @@ def mouvement(ball):
         demarrer.config(text= "arreter")
         cord = terrain.coords(ball[0])
         if cord[0] <= 0 or cord[2] >= LARGEUR or cord[1] <= 0 or cord[3] >= HAUTEUR:
-            rebond2(creation)
+            rebond1(creation)
         terrain.move(ball[0],ball[1],ball[2])
-        id = racine.after(20,lambda : mouvement(creation))
+        id = racine.after(2,lambda : mouvement(creation))
     if inte == 2:
         racine.after_cancel(id)
         demarrer.config(text="Démarrer")
@@ -47,7 +47,7 @@ def stop(event):
         inte += 1 
         if inte == 2:
             inte = 0
-        print(inte)
+        
 
     
 def rebond1(ball_rebond):
